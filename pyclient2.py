@@ -3,6 +3,8 @@ import json
 import sys
 import time
 import math
+import threading
+import random
 
 sys.path.append('../lib/python/arm64')
 import robot_interface as sdk
@@ -13,7 +15,7 @@ udp_robot = sdk.UDP(0xee, 8080, "192.168.123.161", 8082)
 state_robot = sdk.HighState()
 cmd = sdk.HighCmd()
 
-udp_robot.InitCmdData(cmd_robot)
+udp_robot.InitCmdData(cmd)
 
 def on_message(ws, message):
     print("Received message:", message)
@@ -40,6 +42,20 @@ def on_open(ws):
     print("Connected to the WebSocket server")
     ws.send(json.dumps({"type": "getConnectedClients"}))
 
+def walking_code():
+    motiontime = 0
+    while True:
+        time.sleep(0.002)
+        motiontime = motiontime + 1
+
+        udp_robot.Recv()
+        udp_robot.GetRecv(state_robot)
+
+        # ... (rest of the walking code remains the same)
+
+        udp_robot.SetSend(cmd)
+        udp_robot.Send()
+
 random_number = str(random.randint(10, 99))  # generate a random 2-digit number
 name = "python" + random_number
 
@@ -48,9 +64,8 @@ ws = websocket.WebSocketApp(f"ws://143.244.157.174:8080?name={name}",
                             on_error=on_error,
                             on_close=on_close,
                             on_open=on_open)
-ws.run_forever()
 
-while True:
-    time.sleep(0.01)
-    udp_robot.Recv()
-    udp_robot.GetRecv(state_robot)
+ws_thread = threading.Thread(target=ws.run_forever)
+ws_thread.start()
+
+walking_code()
