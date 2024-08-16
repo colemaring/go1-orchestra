@@ -5,8 +5,8 @@ const port = 80;
 
 app.use(express.static("dist"));
 app.get("/", (req, res) => {
-   res.sendFile(__dirname + "index.html");
- });
+  res.sendFile(__dirname + "index.html");
+});
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
@@ -106,10 +106,10 @@ wss.on("connection", (ws, req) => {
         client.send(JSON.stringify({ type: "dance2" }));
       });
     }
-    if (data.type === "dance3") {
+    if (data.type === "stop") {
       // Relay the move message to the connected client
       wss.clients.forEach((client) => {
-        client.send(JSON.stringify({ type: "dance3" }));
+        client.send(JSON.stringify({ type: "stop" }));
       });
     }
   });
