@@ -23,9 +23,8 @@ def on_message(ws, message):
     print("Type:", data["type"])
 
     if data["type"] == "dance1":
-        cmd.mode = 12
-        cmd.gaitType = 1
-        cmd.velocity = [0.0, 0]  # Dance 1 command
+        cmd.mode = 1
+        cmd.euler = [-0.3, 0, 0]
 
     elif data["type"] == "dance2":
         cmd.mode = 13
@@ -50,6 +49,16 @@ def walking_code():
 
         udp_robot.Recv()
         udp_robot.GetRecv(state_robot)
+
+        cmd.mode = 0      # 0:idle, default stand      1:forced stand     2:walk continuously
+        cmd.gaitType = 0
+        cmd.speedLevel = 0
+        cmd.footRaiseHeight = 0
+        cmd.bodyHeight = 0
+        cmd.euler = [0, 0, 0]
+        cmd.velocity = [0, 0]
+        cmd.yawSpeed = 0.0
+        cmd.reserve = 0
 
         # ... (rest of the walking code remains the same)
 
