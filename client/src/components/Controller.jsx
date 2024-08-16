@@ -15,16 +15,18 @@ function Controller({ ws }) {
     ws.send(JSON.stringify({ type: "dance2" }));
   };
 
-  const handleDance3 = () => {
-    console.log("Dance 3 button clicked");
-    ws.send(JSON.stringify({ type: "dance3" }));
+  const handleStop = () => {
+    console.log("Stop button clicked");
+    ws.send(JSON.stringify({ type: "stop" }));
   };
 
   return (
     <div className="controller">
-      <Button onClick={handleDance1}>Dance 1</Button>
-      <Button onClick={handleDance2}>Dance 2</Button>
-      <Button onClick={handleDance3}>Dance 3</Button>
+      <Button onClick={handleDance1}>Move 1</Button>
+      <Button onClick={handleDance2}>Move 2</Button>
+      <Button onClick={handleStop} variant="danger">
+        Stop
+      </Button>
     </div>
   );
 }
