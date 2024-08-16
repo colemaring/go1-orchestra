@@ -40,6 +40,17 @@ def on_message(ws, message):
         cmd.gaitType = 1
         cmd.velocity = [0.0, 0]  # Dance 2 command
 
+    elif data["type"] == "stop":
+        cmd.mode = 0      # 0:idle, default stand      1:forced stand     2:walk continuously
+        cmd.gaitType = 0
+        cmd.speedLevel = 0
+        cmd.footRaiseHeight = 0
+        cmd.bodyHeight = 0
+        cmd.euler = [0, 0, 0]
+        cmd.velocity = [0, 0]
+        cmd.yawSpeed = 0.0
+        cmd.reserve = 0
+        
 def on_error(ws, error):
     print("Error occurred:", error)
 
