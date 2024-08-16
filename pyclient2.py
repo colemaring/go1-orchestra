@@ -18,6 +18,15 @@ cmd = sdk.HighCmd()
 udp_robot.InitCmdData(cmd)
 
 def on_message(ws, message):
+    cmd.mode = 0      # 0:idle, default stand      1:forced stand     2:walk continuously
+    cmd.gaitType = 0
+    cmd.speedLevel = 0
+    cmd.footRaiseHeight = 0
+    cmd.bodyHeight = 0
+    cmd.euler = [0, 0, 0]
+    cmd.velocity = [0, 0]
+    cmd.yawSpeed = 0.0
+    cmd.reserve = 0
     print("Received message:", message)
     data = json.loads(message)
     print("Type:", data["type"])
@@ -49,19 +58,8 @@ def walking_code():
 
         udp_robot.Recv()
         udp_robot.GetRecv(state_robot)
-
-        cmd.mode = 0      # 0:idle, default stand      1:forced stand     2:walk continuously
-        cmd.gaitType = 0
-        cmd.speedLevel = 0
-        cmd.footRaiseHeight = 0
-        cmd.bodyHeight = 0
-        cmd.euler = [0, 0, 0]
-        cmd.velocity = [0, 0]
-        cmd.yawSpeed = 0.0
-        cmd.reserve = 0
-
         # ... (rest of the walking code remains the same)
-
+        print("Sending cmd=",cmd.mode)
         udp_robot.SetSend(cmd)
         udp_robot.Send()
 
@@ -78,3 +76,4 @@ ws_thread = threading.Thread(target=ws.run_forever)
 ws_thread.start()
 
 walking_code()
+
