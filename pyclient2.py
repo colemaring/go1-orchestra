@@ -48,9 +48,9 @@ ws = websocket.WebSocketApp(f"ws://143.244.157.174:8080?name={name}",
                             on_error=on_error,
                             on_close=on_close,
                             on_open=on_open)
+ws.run_forever()
 
 while True:
     time.sleep(0.01)
-    ws.run_forever(timeout=0.01)
     udp_robot.Recv()
     udp_robot.GetRecv(state_robot)
