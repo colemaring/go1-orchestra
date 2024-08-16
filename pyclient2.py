@@ -11,7 +11,7 @@ import robot_interface as sdk
 udp_robot = sdk.UDP(0xee, 8080, "192.168.123.161", 8082)
 
 state_robot = sdk.HighState()
-cmd_robot = sdk.HighCmd()
+cmd = sdk.HighCmd()
 
 udp_robot.InitCmdData(cmd_robot)
 
