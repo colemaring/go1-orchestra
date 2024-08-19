@@ -4,7 +4,6 @@ import sys
 import time
 import math
 import threading
-import random
 
 sys.path.append('../lib/python/arm64')
 import robot_interface as sdk
@@ -74,8 +73,7 @@ def walking_code():
         udp_robot.SetSend(cmd)
         udp_robot.Send()
 
-random_number = str(random.randint(10, 99))  # generate a random 2-digit number
-name = "python" + random_number
+name = "robot GO50885A"
 
 ws = websocket.WebSocketApp(f"ws://143.244.157.174:8080?name={name}",
                             on_message=on_message,
