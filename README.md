@@ -8,8 +8,5 @@ npm i  <br>
 node server  <br> <br>
 
 client setup:  <br>
-only testing for now with node testclient.js  <br>
-
-
-ssh pi@192.168.12.1
+modify the name variable to match the Go1's identifier
 
