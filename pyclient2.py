@@ -73,7 +73,11 @@ def walking_code():
         udp_robot.SetSend(cmd)
         udp_robot.Send()
 
-name = "robot GO50885A"
+if len(sys.argv) != 2:
+        print("Error: Name not specified")
+        sys.exit(1)
+
+name = sys.argv[1]
 
 ws = websocket.WebSocketApp(f"ws://143.244.157.174:8080?name={name}",
                             on_message=on_message,
