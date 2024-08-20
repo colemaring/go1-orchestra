@@ -94,16 +94,16 @@ wss.on("connection", (ws, req) => {
         JSON.stringify({ type: "connectedClients", clients: connectedClients })
       );
     }
-    if (data.type === "dance1") {
+    if (data.type === "tilt") {
       // Relay the move message to the connected client
       wss.clients.forEach((client) => {
-        client.send(JSON.stringify({ type: "dance1" }));
+        client.send(JSON.stringify({ type: "tilt" }));
       });
     }
-    if (data.type === "dance2") {
+    if (data.type === "dance") {
       // Relay the move message to the connected client
       wss.clients.forEach((client) => {
-        client.send(JSON.stringify({ type: "dance2" }));
+        client.send(JSON.stringify({ type: "dance" }));
       });
     }
     if (data.type === "stop") {
@@ -112,23 +112,26 @@ wss.on("connection", (ws, req) => {
         client.send(JSON.stringify({ type: "stop" }));
       });
     }
-  });
-
-  // send move message to appropriate rover client
-  ws.on("message", (message) => {
-    const data = JSON.parse(message);
-    const roverName = data.rover;
-    if (data.type === "move") {
-      // Relay the move message to the connected client where clientName matches roverName
+	if (data.type === "walkF") {
+      // Relay the move message to the connected client
       wss.clients.forEach((client) => {
-        if (client.clientName === roverName) {
-          client.send(
-            JSON.stringify({ type: "move", direction: data.direction })
-          );
-        }
+        client.send(JSON.stringify({ type: "walkF" }));
+      });
+    }
+	if (data.type === "walkB") {
+      // Relay the move message to the connected client
+      wss.clients.forEach((client) => {
+        client.send(JSON.stringify({ type: "walkB" }));
+      });
+    }
+	if (data.type === "form1") {
+      // Relay the move message to the connected client
+      wss.clients.forEach((client) => {
+        client.send(JSON.stringify({ type: "form1" }));
       });
     }
   });
+
 
   // Handle client disconnection
   ws.on("close", () => {
