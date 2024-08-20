@@ -8,7 +8,6 @@ import threading
 sys.path.append('../lib/python/arm64')
 import robot_interface as sdk
 
-# use robots own UDP interface?
 udp_robot = sdk.UDP(0xee, 8080, "192.168.123.161", 8082)
 
 state_robot = sdk.HighState()
@@ -17,7 +16,7 @@ cmd = sdk.HighCmd()
 udp_robot.InitCmdData(cmd)
 
 def on_message(ws, message):
-    cmd.mode = 0      # 0:idle, default stand      1:forced stand     2:walk continuously
+    cmd.mode = 0 
     cmd.gaitType = 0
     cmd.speedLevel = 0
     cmd.footRaiseHeight = 0
@@ -30,17 +29,64 @@ def on_message(ws, message):
     data = json.loads(message)
     print("Type:", data["type"])
 
-    if data["type"] == "dance1":
+    if data["type"] == "tilt":
         cmd.mode = 1
         cmd.euler = [-0.3, 0, 0]
 
-    elif data["type"] == "dance2":
+    elif data["type"] == "dance":
         cmd.mode = 13
         cmd.gaitType = 1
-        cmd.velocity = [0.0, 0]  # Dance 2 command
+        cmd.velocity = [0.0, 0]
+    
+    elif data["type"] == "walkF":
+        cmd.mode = 2
+        cmd.gaitType = 1
+        cmd.velocity[0] = 0.3
+        cmd.footRaiseHeight = 0.1
+
+    elif data["type"] == "walkB":
+        cmd.mode = 2
+        cmd.gaitType = 1
+        cmd.velocity[0] = -0.3
+        cmd.footRaiseHeight = 0.1
+
+    elif data["type"] == "form1":
+        if name == "5885":
+            cmd.mode = 2
+            cmd.gaitType = 1
+            cmd.velocity[0] = -0.3
+            cmd.footRaiseHeight = 0.1
+        elif name == "5886": # change robots name
+            cmd.mode = 2
+            cmd.gaitType = 1
+            cmd.velocity[0] = 0.3
+            cmd.footRaiseHeight = 0.1
+        elif name == "5887":
+            cmd.mode = 2
+            cmd.gaitType = 1
+            cmd.velocity[0] = -0.3
+            cmd.footRaiseHeight = 0.1
+
+        # for 5 seconds
+        start_time = time.time()
+        while time.time() - start_time < 2:
+            udp_robot.SetSend(cmd)
+            udp_robot.Send()
+            time.sleep(0.002)
+
+        # stop formation
+        cmd.mode = 0 
+        cmd.gaitType = 0
+        cmd.speedLevel = 0
+        cmd.footRaiseHeight = 0
+        cmd.bodyHeight = 0
+        cmd.euler = [0, 0, 0]
+        cmd.velocity = [0, 0]
+        cmd.yawSpeed = 0.0
+        cmd.reserve = 0
 
     elif data["type"] == "stop":
-        cmd.mode = 0      # 0:idle, default stand      1:forced stand     2:walk continuously
+        cmd.mode = 0 
         cmd.gaitType = 0
         cmd.speedLevel = 0
         cmd.footRaiseHeight = 0
@@ -61,15 +107,11 @@ def on_open(ws):
     ws.send(json.dumps({"type": "getConnectedClients"}))
 
 def walking_code():
-    motiontime = 0
     while True:
         time.sleep(0.002)
-        motiontime = motiontime + 1
 
         udp_robot.Recv()
         udp_robot.GetRecv(state_robot)
-        # ... (rest of the walking code remains the same)
-        print("Sending cmd=",cmd.mode)
         udp_robot.SetSend(cmd)
         udp_robot.Send()
 
@@ -89,4 +131,3 @@ ws_thread = threading.Thread(target=ws.run_forever)
 ws_thread.start()
 
 walking_code()
-
