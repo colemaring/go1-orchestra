@@ -51,7 +51,7 @@ def on_message(ws, message):
         cmd.footRaiseHeight = 0.1
 
     elif data["type"] == "form1":
-        if name == "814":
+        if name == "605":
             cmd.mode = 2
             cmd.gaitType = 1
             cmd.velocity[0] = -0.3
