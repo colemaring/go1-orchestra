@@ -101,6 +101,7 @@ def on_error(ws, error):
 
 def on_close(ws, *args, **kwargs):
     print("Connection closed")
+    exit()
 
 def on_open(ws):
     print("Connected to the WebSocket server")
