@@ -31,14 +31,26 @@ def on_message(ws, message):
     data = json.loads(message)
     print("Type:", data["type"])
 
-    if data["type"] == "dance":
+    if data["type"] == "tilt":
         cmd.mode = 1
         cmd.euler = [-0.3, 0, 0]
 
-    elif data["type"] == "walkF":
+    elif data["type"] == "dance":
         cmd.mode = 13
         cmd.gaitType = 1
-        cmd.velocity = [0.0, 0]  # Dance 2 command
+        cmd.velocity = [0.0, 0]
+    
+    elif data["type"] == "walkF":
+        cmd.mode = 2
+        cmd.gaitType = 1
+        cmd.velocity[0] = 0.3
+        cmd.footRaiseHeight = 0.1
+
+    elif data["type"] == "walkB":
+        cmd.mode = 2
+        cmd.gaitType = 1
+        cmd.velocity[0] = -0.3
+        cmd.footRaiseHeight = 0.1
 
 def on_error(ws, error):
     print("Error occurred:", error)
