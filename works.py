@@ -66,7 +66,7 @@ def on_open(ws):
 def walking_code():
     motiontime = 0
     while True:
-        time.sleep(0.002)
+        time.sleep(0.05)
         motiontime = motiontime + 1
 
         udp_robot.Recv()
