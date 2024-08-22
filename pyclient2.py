@@ -41,30 +41,30 @@ def on_message(ws, message):
     elif data["type"] == "walkF":
         cmd.mode = 2
         cmd.gaitType = 1
-        cmd.velocity[0] = 0.3
+        cmd.velocity = [0.3, 0]
         cmd.footRaiseHeight = 0.1
 
     elif data["type"] == "walkB":
         cmd.mode = 2
         cmd.gaitType = 1
-        cmd.velocity[0] = -0.3
+        cmd.velocity = [-0.3, 0]
         cmd.footRaiseHeight = 0.1
 
     elif data["type"] == "form1":
         if name == "605":
             cmd.mode = 2
             cmd.gaitType = 1
-            cmd.velocity[0] = -0.3
+            cmd.velocity = [-0.3, 0]
             cmd.footRaiseHeight = 0.1
         elif name == "514": # change robots name
             cmd.mode = 2
             cmd.gaitType = 1
-            cmd.velocity[0] = 0.3
+            cmd.velocity = [-0.3, 0]
             cmd.footRaiseHeight = 0.1
         elif name == "699":
             cmd.mode = 2
             cmd.gaitType = 1
-            cmd.velocity[0] = -0.3
+            cmd.velocity = [-0.3, 0]
             cmd.footRaiseHeight = 0.1
 
         # for 5 seconds
@@ -72,7 +72,7 @@ def on_message(ws, message):
         while time.time() - start_time < 2:
             udp_robot.SetSend(cmd)
             udp_robot.Send()
-            time.sleep(0.002)
+            time.sleep(0.05)
 
         # stop formation
         cmd.mode = 0 
@@ -109,10 +109,11 @@ def on_open(ws):
 
 def walking_code():
     while True:
-        time.sleep(0.002)
+        time.sleep(0.05)
 
         udp_robot.Recv()
         udp_robot.GetRecv(state_robot)
+        print("cmd: ", cmd.mode)
         udp_robot.SetSend(cmd)
         udp_robot.Send()
 
