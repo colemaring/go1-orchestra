@@ -126,16 +126,18 @@ def walking_code():
 if len(sys.argv) != 2:
         print("Error: Name not specified")
         sys.exit(1)
+# error handling for not route to host
+try:
+    ws = websocket.WebSocketApp(f"ws://143.244.157.174:8080?name={name}",
+                                on_message=on_message,
+                                on_error=on_error,
+                                on_close=on_close,
+                                on_open=on_open)
 
-name = sys.argv[1]
+    ws_thread = threading.Thread(target=ws.run_forever)
+    ws_thread.start()
 
-ws = websocket.WebSocketApp(f"ws://143.244.157.174:8080?name={name}",
-                            on_message=on_message,
-                            on_error=on_error,
-                            on_close=on_close,
-                            on_open=on_open)
-
-ws_thread = threading.Thread(target=ws.run_forever)
-ws_thread.start()
-
-walking_code()
+    walking_code()
+except (socket.error, websocket.WebSocketException) as e:
+    print(f"Error during WebSocket communication: {e}")
+    sys.exit()
