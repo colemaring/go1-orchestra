@@ -138,6 +138,6 @@ try:
     ws_thread.start()
 
     walking_code()
-except (socket.error, websocket.WebSocketException) as e:
+except (websocket.WebSocketException) as e:
     print(f"Error during WebSocket communication: {e}")
     sys.exit()
