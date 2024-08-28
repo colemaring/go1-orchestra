@@ -128,6 +128,9 @@ def walking_code():
 if len(sys.argv) != 2:
         print("Error: Name not specified")
         sys.exit(1)
+
+name  = sys.argv[1]
+
 # error handling for not route to host
 try:
     ws = websocket.WebSocketApp(f"ws://143.244.157.174:8080?name={name}",
