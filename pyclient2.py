@@ -88,8 +88,8 @@ def on_message(ws, message):
 
         # dance 1
         cmd.mode = 12
-            cmd.gaitType = 1
-            cmd.velocity = [0.0, 0]
+        cmd.gaitType = 1
+        cmd.velocity = [0.0, 0]
 
     elif data["type"] == "stop":
         cmd.mode = 0 
