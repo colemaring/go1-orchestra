@@ -7,7 +7,7 @@ import threading
 
 sys.path.append('../lib/python/arm64')
 import robot_interface as sdk
-
+connection_active = True
 udp_robot = sdk.UDP(0xee, 8080, "192.168.123.161", 8082)
 
 state_robot = sdk.HighState()
@@ -106,15 +106,17 @@ def on_error(ws, error):
     print("Error occurred:", error)
 
 def on_close(ws, *args, **kwargs):
+    global connection_active
     print("Connection closed")
-    exit()
+    connection_active = False
 
 def on_open(ws):
     print("Connected to the WebSocket server")
     ws.send(json.dumps({"type": "getConnectedClients"}))
 
 def walking_code():
-    while True:
+    global connection_active
+    while connection_active:
         time.sleep(0.05)
 
         udp_robot.Recv()
