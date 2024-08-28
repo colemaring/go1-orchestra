@@ -31,7 +31,7 @@ def on_message(ws, message):
 
     if data["type"] == "tilt":
         cmd.mode = 1
-        cmd.euler = [-0.3, 0, 0]
+        cmd.euler = [0, 0, -0.3]
 
     elif data["type"] == "dance":
         cmd.mode = 13
@@ -51,23 +51,24 @@ def on_message(ws, message):
         cmd.footRaiseHeight = 0.1
 
     elif data["type"] == "form1":
-        if name == "605":
+        # walk forwards or backwards for 2 seconds then dance 1
+        if name == "605": 
             cmd.mode = 2
             cmd.gaitType = 1
-            cmd.velocity = [-0.3, 0]
+            cmd.velocity = [-0.3, 0] # backwards
             cmd.footRaiseHeight = 0.1
-        elif name == "514": # change robots name
+        elif name == "514": # middle robot
             cmd.mode = 2
             cmd.gaitType = 1
-            cmd.velocity = [-0.3, 0]
+            cmd.velocity = [0.3, 0] # forwards
             cmd.footRaiseHeight = 0.1
         elif name == "699":
             cmd.mode = 2
             cmd.gaitType = 1
-            cmd.velocity = [-0.3, 0]
+            cmd.velocity = [-0.3, 0] # backwards
             cmd.footRaiseHeight = 0.1
 
-        # for 5 seconds
+        # for 2 seconds
         start_time = time.time()
         while time.time() - start_time < 2:
             udp_robot.SetSend(cmd)
@@ -84,6 +85,11 @@ def on_message(ws, message):
         cmd.velocity = [0, 0]
         cmd.yawSpeed = 0.0
         cmd.reserve = 0
+
+        # dance 1
+        cmd.mode = 12
+            cmd.gaitType = 1
+            cmd.velocity = [0.0, 0]
 
     elif data["type"] == "stop":
         cmd.mode = 0 
